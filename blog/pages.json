@@ -8,7 +8,7 @@
 			}
 		},
 		{
-			"path" : "pages/user/user",
+			"path" : "pages/creat_item/creat_item",
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
@@ -24,17 +24,5 @@
 		"backgroundColorTop":"#EEEEEE",
 		"backgroundColorBottom":"#EEEEEE"
 	},
-	"uniIdRouter": {},
-	"tabBar": {
-		"list": [
-			{
-				"text": "推荐",
-				"pagePath": "pages/index/index"
-			},
-			{
-				"text": "我的",
-				"pagePath": "pages/user/user"
-			}
-		]
-	}
+	"uniIdRouter": {}
 }
