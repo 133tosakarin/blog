@@ -16,6 +16,11 @@ module.exports = {
 	postgres: {
 		enable: true,
 		package: 'egg-postgres'
+	},
+	
+	session: {
+		enable: true,
+		package: 'egg-session'
 	}
 	
 };

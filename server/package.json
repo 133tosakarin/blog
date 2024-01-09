@@ -12,6 +12,8 @@
     "egg-mysql": "^4.0.0",
     "egg-postgres": "^1.0.2",
     "egg-scripts": "2",
+    "egg-session": "^3.3.0",
+    "install": "^0.13.0",
     "pg": "^8.11.3",
     "tencentcloud-sdk-nodejs-nlp": "^4.0.774"
   },

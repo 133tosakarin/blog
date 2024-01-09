@@ -33,6 +33,12 @@ module.exports = appInfo => {
 			idleTimeoutMillis: 30000
 		}
 	}
+	config.session = {
+		key: 'SESSION_KEY', // 会话的 key
+		maxAge: 86400000, // 会话的过期时间，单位毫秒，默认为一天
+		httpOnly: true, // 是否设置为仅在服务器端访问，默认为 true
+		encrypt: true, // 是否对会话进行加密，默认为 true
+	}
 	// use for cookie sign key, should change to your own and keep security
 	config.keys = appInfo.name + '_1704607873700_5410';
 
