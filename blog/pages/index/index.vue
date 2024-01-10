@@ -20,7 +20,7 @@
 						</view>
 					</navigator>
 					<view class="buttom_tools">
-						<image class="tool_img" src="/static/点赞.png" mode="">
+						<image :id="'like_img_'+el.content_id" class="tool_img" :src="el.like_img" mode="" @click="func_like($event.target)">
 						</image>
 						<text class="count_text">{{el.like_count}}</text>
 						<image class="tool_img" src="/static/评论.png" mode="">
@@ -46,13 +46,13 @@
 							<text class="item_text">{{el.item_text}}</text>
 							<view class="content_imgs">
 								<view v-for="item in el.item_imgs">
-									<image class="content_imgs_style" :src="item" mode=""></image>
+									<image class="content_imgs_style" :src="item" mode="aspectFill"></image>
 								</view>
 							</view>
 						</view>
 					</navigator>
 					<view class="buttom_tools">
-						<image class="tool_img" src="/static/点赞.png" mode="">
+						<image :id="'like_img_'+el.content_id" class="tool_img" :src="el.like_img" mode="" @click="func_like($event.target)">
 						</image>
 						<text class="count_text">{{el.like_count}}</text>
 						<image class="tool_img" src="/static/评论.png" mode="">
@@ -81,7 +81,7 @@
 						</view>
 					</navigator>
 					<view class="buttom_tools">
-						<image class="tool_img" src="/static/点赞.png" mode="">
+						<image :id="'like_img_'+el.content_id" class="tool_img" :src="el.like_img" mode="" @click="func_like($event.target)">
 						</image>
 						<text class="count_text">{{el.like_count}}</text>
 						<image class="tool_img" src="/static/评论.png" mode="">
@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-	const connect_url = "http://172.22.9.9:7001"
+	const connect_url = "http://172.23.64.94:7001/"
 	import {
 		ref
 	} from 'vue'
@@ -119,6 +119,8 @@
 					item_video: current_content.video,
 					like_count: current_content.like_count,
 					comment_count: current_content.comment_count,
+					like_img: '/static/点赞.png',
+					is_like:false
 				}
 				let real_imgs = ['']
 				let deal_img = ''
@@ -164,6 +166,7 @@
 					item_video: '',
 					like_count: 50,
 					comment_count: 50,
+					is_like:false,
 				})
 			}
 		}
@@ -172,7 +175,6 @@
 	items_content.value.shift()
 	console.log("items_content.value:", items_content.value)
 	
-	console.log(items_content.value)
 	let refreshPage = () => {
 		uni.reLaunch({
 			url: '/pages/index/index'
@@ -182,9 +184,26 @@
 		console.log(content)
 		uni.setStorageSync("info", JSON.stringify(content))
 	}
+	let func_like=(element)=>{
+		for(let i = 0; i<items_content.value.length; i++){
+			if("like_img_"+items_content.value[i].content_id==element.id &&items_content.value[i] && !items_content.value[i].is_like){
+				uni.request({
+					url:connect_url+'like',
+					data:{content_id:items_content.value[i].content_id},
+					success(res) {
+						console.log("点赞成功")
+						items_content.value[i].like_count++
+						items_content.value[i].is_like=true
+						items_content.value[i].like_img="/static/点赞1.png"
+					}
+				})
+			}
+		}
+	}
 </script>
 
 <style>
+	
 	.index_items_parent {
 		width: 750rpx;
 		background-color: rgb(238, 238, 238);
@@ -196,7 +215,7 @@
 	.index_items {
 		width: 750rpx;
 		background-color: white;
-		margin-top: 15rpx;
+		margin-top: 5rpx;
 		border-radius: 15rpx;
 		border: 1px rgb(238, 238, 238) solid;
 		border-left-width: 0px;
@@ -285,7 +304,12 @@
 		height: 45rpx;
 		margin: 0rpx 0rpx 10rpx 10rpx;
 	}
-
+	.like_active{
+		width: 45rpx;
+		height: 45rpx;
+		margin: 0rpx 0rpx 10rpx 10rpx;
+		background-image: "/static/点赞1.png";
+	}
 	.content_imgs {
 		display: flex;
 		justify-content: flex-start;

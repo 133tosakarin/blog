@@ -11,7 +11,9 @@
 			<input class="video_url" type="text" maxlength="1000" placeholder="视频地址" v-model="video_1" />
 		</view>
 		<view class="send_item" @click="senditem">上传</view>
+		
 	</view>
+	
 </template>
 
 <script setup>
@@ -56,7 +58,6 @@
 			}
 		})
 	}
-	
 </script>
 
 <style>
@@ -114,5 +115,11 @@
 		font-weight: bold;
 		margin-top: 20rpx;
 		margin-left: 580rpx;
+	}
+	.get_img_file{
+		width: 100rpx;
+		height: 100rpx;
+		background-color: turquoise;
+		border-radius: 15rpx;
 	}
 </style>

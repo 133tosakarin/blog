@@ -16,7 +16,7 @@
 		<!-- 图片内容 -->
 		<view v-for="el in data.item_imgs" v-if="data.type==2">
 			<view class="img_container">
-				<image :src="el" mode=""></image>
+				<image :src="el" mode="widthFix"></image>
 			</view>
 		</view>
 		<!-- 视频内容 -->
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-	let connection_url = "http://172.22.9.9:7001/"
+	let connection_url = "http://172.23.64.94:7001/"
 	import {
 		ref
 	} from 'vue'
@@ -124,7 +124,6 @@
 		const comment_area = document.getElementById("comment_area")
 		window.scrollTo({
 			top: comment_area.offsetTop,
-			behavior: "smooth"
 		})
 	}
 	window.scrollTo({
@@ -190,12 +189,11 @@
 	}
 
 	.img_container {
-		height: 600rpx;
 		overflow: hidden;
 	}
 
 	.img_container image {
-		height: 600rpx;
+		width: 670rpx;
 		margin: 10rpx 10rpx 0rpx 40rpx;
 		border-radius: 5rpx;
 	}
