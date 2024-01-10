@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-	const connect_url = "http://172.23.64.12:7001"
+	const connect_url = "http://localhost:7001"
 	import {
 		ref
 	} from 'vue'

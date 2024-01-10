@@ -14,12 +14,13 @@
     "egg-scripts": "2",
     "egg-session": "^3.3.0",
     "install": "^0.13.0",
+    "loadsh": "^0.0.4",
     "pg": "^8.11.3",
     "tencentcloud-sdk-nodejs-nlp": "^4.0.774"
   },
   "devDependencies": {
     "egg-bin": "6",
-    "egg-mock": "5",
+    "egg-mock": "^5.10.9",
     "eslint": "8",
     "eslint-config-egg": "13"
   },

@@ -39,6 +39,12 @@ module.exports = appInfo => {
 		httpOnly: true, // 是否设置为仅在服务器端访问，默认为 true
 		encrypt: true, // 是否对会话进行加密，默认为 true
 	}
+	
+	config.security = {
+		csrf: {
+			enable: false 	
+		}
+	}
 	// use for cookie sign key, should change to your own and keep security
 	config.keys = appInfo.name + '_1704607873700_5410';
 

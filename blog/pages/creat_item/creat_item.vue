@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-	const connect_url = "http://172.23.64.12:7001/create"
+	const connect_url = "http://localhost:7001/create"
 	const my_url = "http://localhost:7001/"
 	let content_text = '';
 	let img_1 = '',
@@ -45,6 +45,7 @@
 		}
 		console.log(send_item)
 		uni.request({
+			method: 'post',
 			url: connect_url,
 			data: send_item,
 			success(res) {
