@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-	const connect_url = "http://172.23.64.12:7001/create"
+	const connect_url = "http://172.22.9.9:7001/create"
 	const my_url = "http://localhost:7001/"
 	let content_text = '';
 	let img_1 = '',
@@ -34,6 +34,7 @@
 		for(let i = 0; i<imgs.length;i++){
 			if(imgs[i]!=''){real_img.push(imgs[i])}
 		}
+		console.log(real_img)
 		real_img.shift()
 		let send_item = {
 			user_id: 1,
@@ -45,12 +46,15 @@
 		}
 		console.log(send_item)
 		uni.request({
+			method:'POST',
 			url: connect_url,
 			data: send_item,
 			success(res) {
 				console.log(res.data)
 				if (res.data.success == true) {
-
+					uni.reLaunch({
+						url: '/pages/index/index'
+					})
 				}
 			}
 		})
