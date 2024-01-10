@@ -1,30 +1,7 @@
 <template>
 	<view>
 		<view class="index_items_parent" v-for="el in items_content">
-			<!-- 帖子内容（视频） -->
-			<view class="index_items" v-if="el.type==3">
-				<!-- 人物介绍 -->
-				<view class="character_introduction">
-					<image class="head_img" :src="el.character_img" mode=""></image>
-					<view class="middle_introduction">
-						<text class="character_name">{{el.character_name}}\n</text>
-						<text class="send_time">{{el.send_time}}</text>
-					</view>
-					<text class="follow_like">+ 关注</text>
-				</view>
-				<view class="item_content">
-					<text class="item_text">{{el.item_text}}</text>
-					<video :enable-play-gesture="true" :title="el.item_text" :show-mute-btn="true" object-fit="cover" class="item_video" :src="el.item_video" controls></video>
-					<view class="buttom_tools">
-						<image class="tool_img" src="/static/点赞.png" mode="">
-						</image>
-						<text class="count_text">{{el.like_count}}</text>
-						<image class="tool_img" src="/static/评论.png" mode="">
-						</image>
-						<text class="count_text">{{el.comment_count}}</text>
-					</view>
-				</view>
-			</view>
+
 			<!-- 帖子内容（仅文本） -->
 			<view class="index_items" v-if="el.type==1">
 				<!-- 人物介绍 -->
@@ -52,22 +29,45 @@
 			<view class="index_items" v-if="el.type==2">
 				<!-- 人物介绍 -->
 				<view class="character_introduction">
-					<image class="head_img"
-						src="https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500"
-						mode=""></image>
+					<image class="head_img" :src="el.character_img" mode=""></image>
 					<view class="middle_introduction">
-						<text class="character_name">爱坤家族\n</text>
-						<text class="send_time">2023-10-11 20:16</text>
+						<text class="character_name">{{el.character_name}}\n</text>
+						<text class="send_time">{{el.send_time}}</text>
 					</view>
 					<text class="follow_like">+ 关注</text>
 				</view>
 				<view class="item_content">
-					<text class="item_text">儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！怎么会是这个样子，快来看看吧！最新新闻！热门新闻！</text>
+					<text class="item_text">{{el.item_text}}</text>
 					<view class="content_imgs">
 						<view v-for="item in el.item_imgs">
 							<image class="content_imgs_style" :src="item" mode=""></image>
 						</view>
 					</view>
+					<view class="buttom_tools">
+						<image class="tool_img" src="/static/点赞.png" mode="">
+						</image>
+						<text class="count_text">{{el.like_count}}</text>
+						<image class="tool_img" src="/static/评论.png" mode="">
+						</image>
+						<text class="count_text">{{el.comment_count}}</text>
+					</view>
+				</view>
+			</view>
+			<!-- 帖子内容（视频） -->
+			<view class="index_items" v-if="el.type==3">
+				<!-- 人物介绍 -->
+				<view class="character_introduction">
+					<image class="head_img" :src="el.character_img" mode=""></image>
+					<view class="middle_introduction">
+						<text class="character_name">{{el.character_name}}\n</text>
+						<text class="send_time">{{el.send_time}}</text>
+					</view>
+					<text class="follow_like">+ 关注</text>
+				</view>
+				<view class="item_content">
+					<text class="item_text">{{el.item_text}}</text>
+					<video :enable-play-gesture="true" :title="el.item_text" :show-mute-btn="true" object-fit="cover"
+						class="item_video" :src="el.item_video" controls></video>
 					<view class="buttom_tools">
 						<image class="tool_img" src="/static/点赞.png" mode="">
 						</image>
@@ -86,118 +86,64 @@
 </template>
 
 <script setup>
-	let refreshPage = ()=>{
+	const connect_url = "http://172.23.64.12:7001"
+	import {
+		ref
+	} from 'vue'
+	let items_content = ref([{}])
+	uni.request({
+		url: connect_url,
+		success(res) {
+			for (let i = 0; i < res.data.length; i++) {
+				let current_content = res.data[i]
+				let temp_content = {
+					content_id: current_content.content_id,
+					type: current_content.type, //1--纯文本 2--图片 3--视频
+					character_img: current_content.user_img,
+					character_name: current_content.user_name,
+					send_time: current_content.create_time,
+					item_text: current_content.content_text,
+					item_imgs: current_content.imgs,
+					item_video: current_content.video,
+					like_count: current_content.like_count,
+					comment_count: current_content.comment_count,
+				}
+				let real_imgs = ['']
+				let deal_img = ''
+				let flag = true //true当前deai_img无数据  false有数据
+				for (let j = 0; j < temp_content.item_imgs.length; j++) {
+					//deal_img无数据
+					if (flag == true) {
+						deal_img = temp_content.item_imgs[j]
+						flag = false
+					}
+					//deal_img有数据
+					else if (flag == false) {
+						if (temp_content.item_imgs[j].startsWith("http")) {
+							real_imgs.push(deal_img)
+							deal_img = temp_content.item_imgs[j]
+						} else {
+							deal_img = deal_img + ',' + temp_content.item_imgs[j]
+						}
+					}
+				}
+				real_imgs.push(deal_img)
+				real_imgs.shift()
+				temp_content.item_imgs = real_imgs
+				items_content.value.push(temp_content)
+			}
+
+		}
+	})
+	items_content.value.shift()
+	console.log("items_content:", items_content.value)
+
+
+	let refreshPage = () => {
 		uni.reLaunch({
-			url:'/pages/index/index'
+			url: '/pages/index/index'
 		})
 	}
-	let items_content = [
-		{
-			content_id: "A001",
-			type: 2, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！怎么会是这个样子，快来看看吧！最新新闻！热门新闻！",
-			item_imgs: [
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c"
-			],
-			item_video: "",
-			like_count: 105,
-			comment_count: 44,
-		},
-		{
-			content_id: "A001",
-			type: 3, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！怎么会是这个样子，快来看看吧！最新新闻！热门新闻！",
-			item_imgs: [],
-			item_video: "http://172.23.167.18:7001/public/video/video1.mp4",
-			like_count: 203,
-			comment_count: 38,
-		},
-		{
-			content_id: "A001",
-			type: 2, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！怎么会是这个样子，快来看看吧！最新新闻！热门新闻！",
-			item_imgs: [
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c"
-			],
-			item_video: "",
-			like_count: 105,
-			comment_count: 44,
-		},
-		{
-			content_id: "A002",
-			type: 1, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！",
-			item_imgs: [],
-			item_video: "",
-			like_count: 45,
-			comment_count: 7,
-		},
-		{
-			content_id: "A003",
-			type: 1, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！",
-			item_imgs: [],
-			item_video: "",
-			like_count: 45,
-			comment_count: 7,
-		},
-		{
-			content_id: "A004",
-			type: 2, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！怎么会是这个样子，快来看看吧！最新新闻！热门新闻！",
-			item_imgs: [
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c",
-				"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F7b031480-3e80-48a4-b53c-9f0edaf4744c%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707301244&t=4dabaa884a7962543d18d73a9a70481c"
-			],
-			item_video: "",
-			like_count: 105,
-			comment_count: 44,
-		},
-		{
-			content_id: "A005",
-			type: 1, //1--纯文本 2--图片 3--视频
-			character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
-			character_name: "爱坤家族",
-			send_time: "2023-10-11 20:16",
-			item_text: "儿媳生女儿被赶走,谁知离婚现场换尿片，一看是个带把的!快来围观！",
-			item_imgs: [],
-			item_video: "",
-			like_count: 45,
-			comment_count: 7,
-		}
-	]
 </script>
 
 <style>
@@ -275,7 +221,7 @@
 		line-height: 45rpx;
 		font-size: 28rpx;
 		display: -webkit-box;
-		-webkit-line-clamp: 2;
+		-webkit-line-clamp: 5;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 		font-family: "黑体";
@@ -301,6 +247,7 @@
 		height: 45rpx;
 		margin: 0rpx 0rpx 10rpx 10rpx;
 	}
+
 	.content_imgs {
 		display: flex;
 		justify-content: flex-start;

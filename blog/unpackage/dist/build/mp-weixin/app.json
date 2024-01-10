@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/user/user"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#EEEEEE",
+    "backgroundColorTop": "#EEEEEE",
+    "backgroundColorBottom": "#EEEEEE"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "text": "推荐",
+        "pagePath": "pages/index/index"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/user/user"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
