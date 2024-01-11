@@ -1,7 +1,7 @@
 const { Controller } = require('egg');
 const tencentcloud  = require("tencentcloud-sdk-nodejs-nlp");
 
-
+let user_info = null
 class HomeController extends Controller {
 
   
@@ -24,12 +24,18 @@ class HomeController extends Controller {
 			return
 		}
 		console.log('login success')
-		ctx.session.user = ret.rows[0]
-		console.log('session' + ctx.session.user)
+		console.log(ret.rows)
+		ctx.session.user_info = ret.rows[0]
+		user_info = ret.rows[0]
+		if (ctx.session.user != null) {
+			console.log('session' + ctx.session)
+		}
 		ctx.body = {
 			success: true,
-			message: 'login success!'
+			message: 'login success!',
+			user_info: user_info
 		}
+		//ctx.redirect('/b')
 		return
 	}
 	ctx.body = {
@@ -90,6 +96,30 @@ class HomeController extends Controller {
 		  
 	  };
 	  ctx.body = await client.TextEmbellish(params)
+  }
+  
+  async UserInfo() {
+	  const {ctx} = this
+	  let user = ctx.session.user_info
+	  console.log('session: 'ctx.session)
+	  console.log('user_info: 'user_info)
+	  if (user_info != null) {
+		  user = user_info
+	  }
+	  if (user == null) {
+		  console.log('have not login')
+		  ctx.body = {
+			  message: 'Please login',
+			  success: 'false'
+		  }
+		  // ctx.redirect('localhost:5173/pages/login/login')
+		  return
+	  }
+	  console.log('session: ',user)
+	  ctx.body = {
+		  user: user,
+		  success: true
+	  }
   }
 }
 

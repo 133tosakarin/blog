@@ -48,14 +48,16 @@
 			method: 'post',
 			url: connect_url,
 			data: send_item,
+			method:"POST",
 			success(res) {
 				console.log(res.data)
 				if (res.data.success == true) {
-
+					
 				}
 			}
 		})
 	}
+	
 </script>
 
 <style>
