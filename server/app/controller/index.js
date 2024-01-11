@@ -48,6 +48,8 @@ class IndexController extends Controller {
 	  }
 	  imgs += '}'
 	  // console.log(imgs)
+	  console.log('index: ', ctx.session.user_info)
+	  console.log('index_session: ',ctx.session)
 	  let result = await this.app.postgres.query(sql, [forum.create_time, forum.type, forum.content_text, imgs, forum.video, forum.user_id])
 	  // console.log('result.rows: ', result)
 	  ctx.body = { success: result.rowCount > 0}

@@ -13,7 +13,7 @@ class HomeController extends Controller {
 	let judge_sql = 'select * from tbl_user where user_name = $1'
 	let ret = await this.app.postgres.query(judge_sql, [user_name])
 	let is_exist = ret.rowCount > 0
-	ctx.session.user = null
+
 	if (is_exist) {
 		if (password != ret.rows[0].password) {
 			console.log('need $1 but find $2', [ret.rows[0].password, password])
@@ -101,8 +101,8 @@ class HomeController extends Controller {
   async UserInfo() {
 	  const {ctx} = this
 	  let user = ctx.session.user_info
-	  console.log('session: 'ctx.session)
-	  console.log('user_info: 'user_info)
+	  console.log('session: ', ctx.session)
+	  console.log('user_info: ', user_info)
 	  if (user_info != null) {
 		  user = user_info
 	  }
