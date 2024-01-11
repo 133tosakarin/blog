@@ -36,6 +36,7 @@
 		for(let i = 0; i<imgs.length;i++){
 			if(imgs[i]!=''){real_img.push(imgs[i])}
 		}
+		console.log(real_img)
 		real_img.shift()
 		let send_item = {
 			user_id: 1,
@@ -47,13 +48,16 @@
 		}
 		console.log(send_item)
 		uni.request({
+			method:'POST',
 			url: connect_url,
 			data: send_item,
 			method:"POST",
 			success(res) {
 				console.log(res.data)
 				if (res.data.success == true) {
-					
+					uni.reLaunch({
+						url: '/pages/index/index'
+					})
 				}
 			}
 		})

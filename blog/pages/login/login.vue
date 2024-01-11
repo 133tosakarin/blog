@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+<<<<<<< HEAD
 	let username = ''
 	let password = ''
 	let login = () => {
@@ -39,6 +40,64 @@
 			}
 		})
 	}
+=======
+let username = ''
+let password = ''
+let login = () => {
+    // 检查用户名和密码是否为空
+    if (!username.trim() || !password.trim()) {
+        uni.showToast({
+            title: '用户名或密码不能为空',
+            icon: 'none',
+            duration: 2000
+        });
+        return; // 终止函数执行
+    }
+
+    let login_let = {
+        username: username,
+        password: password,
+    }
+    console.log(login_let)
+    uni.request({
+        url: "http://172.22.9.9:7001/login",
+        data: login_let,
+        success(res) {
+            console.log(res.data)
+            // 检查后端返回的指令
+            if (res.data && res.data.success) {
+                // 登录成功，跳转到index.vue页面
+                uni.navigateTo({
+                    url: '/pages/index/index'
+                });
+            } else if (res.data && res.data.message === 'username or password error!') {
+                // 用户名或密码错误
+                uni.showToast({
+                    title: '用户名或密码错误',
+                    icon: 'none',
+                    duration: 2000
+                });
+            } else {
+                // 其他登录失败情况
+                uni.showToast({
+                    title: '登录失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
+        },
+        fail(err) {
+            // 请求失败，弹出提示框
+            uni.showToast({
+                title: '请求失败',
+                icon: 'none',
+                duration: 2000
+            });
+            console.log('请求失败', err);
+        }
+    })
+}
+>>>>>>> c1643a01fac048f72b9dc9125f2ef131e67b38b0
 </script>
 
 <style>
