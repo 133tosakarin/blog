@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-	let connection_url = "http://172.23.64.94:7001/"
+	let connection_url = "http://172.22.9.9:7001/"
 	import {
 		ref
 	} from 'vue'
@@ -126,6 +126,7 @@
 			top: comment_area.offsetTop,
 		})
 	}
+	
 	window.scrollTo({
 		top: document.getElementById("page_top")
 	})

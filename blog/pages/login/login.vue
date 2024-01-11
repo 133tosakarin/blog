@@ -40,16 +40,22 @@ let login = () => {
         username: username,
         password: password,
     }
-    console.log(login_let)
     uni.request({
         url: "http://172.22.9.9:7001/login",
         data: login_let,
         success(res) {
-            console.log(res.data)
+            console.log("Login页面获取的反馈数据：", res.data)
             // 检查后端返回的指令
             if (res.data && res.data.success) {
+				console.log("login页面获取的数据",res.data)
+				uni.setStorageSync("user_name",res.data.user_info.user_name)
+				uni.setStorageSync("use_img",res.data.user_info.user_img)
+				uni.setStorageSync("user_id",res.data.user_info.user_id)
+				uni.setStorageSync("isLogin",'true')
+				// 让user页面刷新
+				
                 // 登录成功，跳转到index.vue页面
-                uni.navigateTo({
+                uni.switchTab({
                     url: '/pages/index/index'
                 });
             } else if (res.data && res.data.message === 'username or password error!') {

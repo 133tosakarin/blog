@@ -1,14 +1,15 @@
 <template>
 	<view class="container">
-
-		<view class="profile-section">
-			<!-- 用户信息区域 -->
-			<view class="avatar">
-				<image src="../../static/avatar.jpg" class="avatar-img"></image>
-			</view>
-			<view class="user-info">
-				<text class="username">未登录</text>
-				<text class="description">简介: 这里是个人简介</text>
+		<view>
+			<view class="profile-section">
+				<!-- 用户信息区域 -->
+				<view class="avatar">
+					<image :src="img_src" class="avatar-img"></image>
+				</view>
+				<view class="user-info">
+					<text class="username" @click="to_login($event.target)" id="change_name">未登录（点击登录）</text>
+					<text class="description">简介: 这个人比较懒，还没有写简介</text>
+				</view>
 			</view>
 		</view>
 		<!-- 顶部个人信息-->
@@ -97,21 +98,74 @@
 				<image class="bottom_img" src="../../static/推荐.png" mode=""></image>
 				<text class="bottom_text">推荐我们</text>
 			</view>
+			<view class="tuijie">
+				<image class="bottom_img" src="../../static/VIP.png" mode=""></image>
+				<text class="bottom_text">点亮会员</text>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	try{
-		if(uni.getStorageSync("isLogin")!="true"){
-			console.log("未登录")
+	import {
+		defineComponent
+	} from 'vue'
+	import {
+		onTabItemTap
+	} from '@dcloudio/uni-app'
+
+	let user_name = ref(uni.getStorageSync("user_name"))
+	let user_img = ref(uni.getStorageSync("user_img"))
+	let img_src = ref('https://img0.baidu.com/it/u=2077200490,1617690509&fm=253&fmt=auto&app=138&f=JPEG?w=438&h=500')
+
+	onTabItemTap(() => {
+		if (user_name.value != '') {
+			console.log("value不为空，设置isLogin为true")
+			isLogin.value = true
+		}
+		// 获取登录成功的用户信息
+		user_name = ref(uni.getStorageSync("user_name"))
+		user_img = ref(uni.getStorageSync("user_img"))
+		console.log("user_name", user_name.value)
+		console.log("user_img", user_img.value)
+		
+		if(isLogin.value){
+			document.getElementById("change_name").innerText=user_name.value
+			
+		}
+	})
+
+	import {
+		ref
+	} from 'vue'
+	console.log("刷新了")
+	let isLogin = ref(false)
+	let connect_url = "http://172.22.9.9:7001/login"
+
+	uni.request({
+		url: connect_url,
+		success(res) {
+			console.log("user获取的请求信息:", res.data)
+			if (res.data.success == true) {
+				console.log("user页面登录成功", res.data)
+				uni.setStorageSync("isLogin", 'true')
+			} else {
+				console.log("user页面登录失败", res.data)
+				uni.setStorageSync("isLogin", 'false')
+				uni.navigateTo({
+					url: "/pages/login/login"
+				})
+			}
+		}
+	})
+	let to_login = (element) => {
+		console.log("elment: ",element)
+		if (isLogin.value == false) {
+			console.log("点击登录，开始跳转Login页面")
 			uni.navigateTo({
-				url:"/pages/login/login"
+				url: "/pages/login/login"
 			})
 		}
-	}
-	catch(e){
-		
 	}
 </script>
 
@@ -120,17 +174,14 @@
 		display: flex;
 		flex-direction: column;
 		width: 750rpx;
-		height:1150rpx;
-		background: url(../../userbackground.jpg) repeat fixed center;
-		
+		height: 1150rpx;
+
 	}
 
 	.profile-section {
 		display: flex;
 		padding: 20px;
-		background-color: gold;
-		background: url(../../userbackground.jpg) repeat fixed center;
-		border-radius: 10rpx  10rpx 10rpx 10rpx;
+		border-radius: 10rpx 10rpx 10rpx 10rpx;
 	}
 
 	.avatar {
@@ -248,6 +299,8 @@
 		width: 95%;
 		margin-left: 20rpx;
 		line-height: 80rpx;
+		padding-bottom: 10rpx;
+		border-bottom: 1px rgb(200,200,200) solid;
 		height: 80rpx;
 		/* background-color: rgb(250, 250, 250); */
 	}
@@ -260,8 +313,10 @@
 		width: 95%;
 		margin-left: 20rpx;
 		height: 80rpx;
-	/* 	background-color: rgb(250, 250, 250); */
-		margin-top: 20rpx;
+		padding-bottom: 10rpx;
+		border-bottom: 1px rgb(200,200,200) solid;
+		/* 	background-color: rgb(250, 250, 250); */
+		margin-top: 10rpx;
 	}
 
 	.tuijie {
@@ -272,8 +327,10 @@
 		width: 95%;
 		margin-left: 20rpx;
 		height: 80rpx;
-/* 		background-color: rgb(250, 250, 250); */
-		margin-top: 20rpx;
+		padding-bottom: 10rpx;
+		border-bottom: 1px rgb(200,200,200) solid;
+		/* 		background-color: rgb(250, 250, 250); */
+		margin-top: 10rpx;
 	}
 
 	.bottom_img {

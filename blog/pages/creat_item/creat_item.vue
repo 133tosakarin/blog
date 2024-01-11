@@ -17,6 +17,22 @@
 </template>
 
 <script setup>
+	import {
+		defineComponent
+	} from 'vue'
+	import {
+		onTabItemTap
+	} from '@dcloudio/uni-app'
+	onTabItemTap(()=>{
+		console.log("点击了增加帖子")
+		let user_id = uni.getStorageSync("user_id")
+		console.log("Creat_Item获取的UserId",user_id)
+		if(user_id==null){
+			uni.navigateTo({
+				url:'/pages/login/login'
+			})
+		}
+	})
 	const connect_url = "http://172.22.9.9:7001/create"
 	const my_url = "http://localhost:7001/"
 	let content_text = '';
@@ -33,13 +49,15 @@
 		if (imgs[0] != '') content_type = 2
 		if (video_1 != '') content_type = 3
 		let real_img = ['']
+		let user_id = uni.getStorageSync("user_id") 
 		for(let i = 0; i<imgs.length;i++){
 			if(imgs[i]!=''){real_img.push(imgs[i])}
 		}
 		console.log(real_img)
 		real_img.shift()
+		console.log("user_id: ",user_id)
 		let send_item = {
-			user_id: 1,
+			user_id: user_id,
 			type: content_type,
 			content_text: content_text,
 			imgs: real_img,
