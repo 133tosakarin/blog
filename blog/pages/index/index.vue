@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-	const connect_url = "http://172.23.64.94:7001/"
+	const connect_url = "http://172.22.9.9:7001/"
 	import {
 		ref
 	} from 'vue'
@@ -145,10 +145,7 @@
 				real_imgs.shift()
 				temp_content.item_imgs = real_imgs
 				items_content.value.push(temp_content)
-
 			}
-			
-
 		},
 		fail() {
 			// 如果items_content为空，就往里面填入假数据，以便开发

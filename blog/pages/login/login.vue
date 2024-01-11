@@ -23,24 +23,6 @@
 </template>
 
 <script setup>
-<<<<<<< HEAD
-	let username = ''
-	let password = ''
-	let login = () => {
-		let login_let = {
-			username: username,
-			password: password,
-		}
-		console.log(login_let)
-		uni.request({
-			url: "http://172.22.9.9:7001/login",
-			data: login_let,
-			success(res) {
-				console.log(res.data)
-			}
-		})
-	}
-=======
 let username = ''
 let password = ''
 let login = () => {
@@ -97,7 +79,6 @@ let login = () => {
         }
     })
 }
->>>>>>> c1643a01fac048f72b9dc9125f2ef131e67b38b0
 </script>
 
 <style>

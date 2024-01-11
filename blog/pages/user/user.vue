@@ -7,7 +7,7 @@
 				<image src="../../static/avatar.jpg" class="avatar-img"></image>
 			</view>
 			<view class="user-info">
-				<text class="username">用户名</text>
+				<text class="username">未登录</text>
 				<text class="description">简介: 这里是个人简介</text>
 			</view>
 		</view>
@@ -15,15 +15,15 @@
 		<view class="topbar">
 			<view class="myblog">
 				<text>我的帖子</text>
-				<text>110</text>
+				<text>0</text>
 			</view>
 			<view class="my_interest">
 				<text>我的关注</text>
-				<text>1</text>
+				<text>0</text>
 			</view>
 			<view class="fans">
 				<text>粉丝</text>
-				<text>10000万+</text>
+				<text>0</text>
 			</view>
 		</view>
 		<!-- 中部我的信息 -->
@@ -101,10 +101,18 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		// 页面的脚本部分
-	};
+<script setup>
+	try{
+		if(uni.getStorageSync("isLogin")!="true"){
+			console.log("未登录")
+			uni.navigateTo({
+				url:"/pages/login/login"
+			})
+		}
+	}
+	catch(e){
+		
+	}
 </script>
 
 <style>
