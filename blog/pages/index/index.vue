@@ -13,8 +13,12 @@
 					</view>
 					<text class="follow_like">+ 关注</text>
 				</view>
-				<view class="item_content">
-					<text class="item_text">{{el.item_text}}</text>
+				<view class="item_content" :id="el.content_id">
+					<navigator url="/pages/content_detail/content_detail">
+						<view @click="load_detail(el)">
+							<text class="item_text">{{el.item_text}}</text>
+						</view>
+					</navigator>
 					<view class="buttom_tools">
 						<image class="tool_img" src="/static/点赞.png" mode="">
 						</image>
@@ -37,12 +41,16 @@
 					<text class="follow_like">+ 关注</text>
 				</view>
 				<view class="item_content">
-					<text class="item_text">{{el.item_text}}</text>
-					<view class="content_imgs">
-						<view v-for="item in el.item_imgs">
-							<image class="content_imgs_style" :src="item" mode=""></image>
+					<navigator url="/pages/content_detail/content_detail">
+						<view @click="load_detail(el)">
+							<text class="item_text">{{el.item_text}}</text>
+							<view class="content_imgs">
+								<view v-for="item in el.item_imgs">
+									<image class="content_imgs_style" :src="item" mode=""></image>
+								</view>
+							</view>
 						</view>
-					</view>
+					</navigator>
 					<view class="buttom_tools">
 						<image class="tool_img" src="/static/点赞.png" mode="">
 						</image>
@@ -65,9 +73,13 @@
 					<text class="follow_like">+ 关注</text>
 				</view>
 				<view class="item_content">
-					<text class="item_text">{{el.item_text}}</text>
-					<video :enable-play-gesture="true" :title="el.item_text" :show-mute-btn="true" object-fit="cover"
-						class="item_video" :src="el.item_video" controls></video>
+					<navigator url="/pages/content_detail/content_detail">
+						<view @click="load_detail(el)">
+							<text class="item_text">{{el.item_text}}</text>
+							<video :enable-play-gesture="true" :title="el.item_text" :show-mute-btn="true"
+								object-fit="cover" class="item_video" :src="el.item_video" controls></video>
+						</view>
+					</navigator>
 					<view class="buttom_tools">
 						<image class="tool_img" src="/static/点赞.png" mode="">
 						</image>
@@ -131,18 +143,44 @@
 				real_imgs.shift()
 				temp_content.item_imgs = real_imgs
 				items_content.value.push(temp_content)
-			}
 
+			}
+			
+
+		},
+		fail() {
+			// 如果items_content为空，就往里面填入假数据，以便开发
+			if (items_content.value.length == 0) {
+				items_content.value.push({
+					content_id: 1,
+					type: 2, //1--纯文本 2--图片 3--视频
+					character_img: "https://img1.baidu.com/it/u=2139451249,2432292307&fm=253&fmt=auto&app=138&f=JPEG?w=553&h=500",
+					character_name: "IKun永相随",
+					send_time: "2077/12/31 23:59:59",
+					item_text: "真的很抱歉哦，数据获取失败了~",
+					item_imgs: [
+						'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa1a6b1bc-c317-4a6a-8bb3-28a3c29b8369%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1707455205&t=11084879c8738b84685d080135dc0e99'
+					],
+					item_video: '',
+					like_count: 50,
+					comment_count: 50,
+				})
+			}
 		}
+		
 	})
 	items_content.value.shift()
-	console.log("items_content:", items_content.value)
-
-
+	console.log("items_content.value:", items_content.value)
+	
+	console.log(items_content.value)
 	let refreshPage = () => {
 		uni.reLaunch({
 			url: '/pages/index/index'
 		})
+	}
+	let load_detail = (content) => {
+		console.log(content)
+		uni.setStorageSync("info", JSON.stringify(content))
 	}
 </script>
 
