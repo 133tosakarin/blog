@@ -167,6 +167,8 @@
 					like_count: 50,
 					comment_count: 50,
 					is_like:false,
+					like_img:'/static/点赞.png',
+					is_like:false
 				})
 			}
 		}
