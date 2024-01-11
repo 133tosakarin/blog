@@ -8,7 +8,35 @@
 			}
 		},
 		{
-			"path" : "pages/creat_item/creat_item",
+			"path": "pages/creat_item/creat_item",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/aichat/aichat",
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
@@ -27,7 +55,7 @@
 			"path" : "pages/index/aichat/aichat",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "AI聊天",
 				"enablePullDownRefresh" : false
 			}
 		}
@@ -37,8 +65,35 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#EEEEEE",
-		"backgroundColorTop":"#EEEEEE",
-		"backgroundColorBottom":"#EEEEEE"
+		"backgroundColorTop": "#EEEEEE",
+		"backgroundColorBottom": "#EEEEEE"
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"tabBar": {
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/index/index",
+				"iconPath": "static/index.png",
+				"selectedIconPath": "static/selected-index.png"
+			},
+			{
+				"text": "+",
+				"pagePath": "pages/creat_item/creat_item",
+				"iconPath": "static/creat.png",
+				"selectedIconPath": "static/selected-creat.png"
+			},
+			{
+				"text": "AIchat",
+				"pagePath": "pages/index/aichat/aichat",
+				"iconPath": "static/aichat.png",
+				"selectedIconPath": "static/selected-aichat.png"
+			},
+			{
+				"text": "用户",
+				"pagePath": "pages/user/user",
+				"iconPath": "static/user.png",
+				"selectedIconPath": "static/selected-user.png"
+			}
+		]
+	}
 }

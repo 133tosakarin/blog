@@ -16,7 +16,7 @@
 		<!-- 图片内容 -->
 		<view v-for="el in data.item_imgs" v-if="data.type==2">
 			<view class="img_container">
-				<image :src="el" mode=""></image>
+				<image :src="el" mode="widthFix"></image>
 			</view>
 		</view>
 		<!-- 视频内容 -->
@@ -67,10 +67,7 @@
 	let send_content = ref('') //要发送的评论
 	let str_data = uni.getStorageSync("info")
 	let data = ref(JSON.parse(str_data))
-	// setTimeout(()=>{ 
-	// 	uni.reLaunch({
-	// 		url: '/pages/content_detail/content_detail'
-	// 	})}, 20000)
+
 	uni.request({
 		url: connection_url + "comment",
 		data: {
@@ -91,6 +88,8 @@
 	let reveal_all_text = (event) => {
 		reveal_lines.value = '999'
 	}
+	let user_id = uni.getStorageSync("user_id")
+	console.log("user_id: ", user_id)
 	console.log("send_content: ", send_content.value)
 	let send_comment = () => {
 		uni.request({
@@ -98,7 +97,8 @@
 			method: "POST",
 			data: {
 				content_id: data.value.content_id,
-				comment_text: send_content.value
+				comment_text: send_content.value,
+				user_id:user_id
 			},
 			success(res) {
 				send_attention.value = "评论成功"
@@ -127,9 +127,9 @@
 		const comment_area = document.getElementById("comment_area")
 		window.scrollTo({
 			top: comment_area.offsetTop,
-			behavior: "smooth"
 		})
 	}
+	
 	window.scrollTo({
 		top: document.getElementById("page_top")
 	})
@@ -193,12 +193,11 @@
 	}
 
 	.img_container {
-		height: 600rpx;
 		overflow: hidden;
 	}
 
 	.img_container image {
-		height: 600rpx;
+		width: 670rpx;
 		margin: 10rpx 10rpx 0rpx 40rpx;
 		border-radius: 5rpx;
 	}

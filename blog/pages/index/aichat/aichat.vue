@@ -44,14 +44,14 @@
 		ref,
 		nextTick
 	} from 'vue'
-	const url = "http://localhost:7001/aichat"
+	const url = "http://172.22.9.9:7001/aichat"
 	let items = ref([{
-			src: "https://th.bing.com/th/id/OIP.pDviTXjBv7dv-OWI-2whcAHaFQ?w=226&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+			src: "https://img0.baidu.com/it/u=774820494,3487643102&fm=253&fmt=auto&app=138&f=JPEG?w=457&h=657",
 			message: "azcvcvzvx",
 			is_own: false
 		},
 		{
-			src: "https://th.bing.com/th/id/OIP.pDviTXjBv7dv-OWI-2whcAHaFQ?w=226&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+			src: "https://img0.baidu.com/it/u=774820494,3487643102&fm=253&fmt=auto&app=138&f=JPEG?w=457&h=657",
 			message: "zxcxzczcxzczxcxzc",
 			is_own: false
 		}
@@ -61,7 +61,7 @@
 	let SendMessage = () => {
 		if (input_msg.value.length > 0) {
 			let item = {
-				src: "https://th.bing.com/th/id/OIP.Y1ROitBqzWZDOB9TsvBYMwHaFF?w=266&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+				src: "https://img0.baidu.com/it/u=519070054,1937489670&fm=253&fmt=auto&app=138&f=JPG?w=500&h=707",
 				message: input_msg.value,
 				is_own: true
 			}
@@ -88,7 +88,7 @@
 	let LoadData = (res) => {
 		let text = ParseData(res.data)
 		let item = {
-			src: "https://th.bing.com/th/id/OIP.pDviTXjBv7dv-OWI-2whcAHaFQ?w=226&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+			src: "https://img0.baidu.com/it/u=774820494,3487643102&fm=253&fmt=auto&app=138&f=JPEG?w=457&h=657",
 			message: text,
 			is_own: false
 		}

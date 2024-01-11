@@ -75,7 +75,9 @@ class IndexController extends Controller {
 	  if (ctx.session.user != null) {
 		  console.log('ctx.session.user is null')
 		  user_id = ctx.session.user.user_id
-	  } 
+	  } else {
+		  user_id= data.user_id
+	  }
 	  let result = await this.app.postgres.query(sql, [data.content_id, user_id, data.comment_text])
 	  ctx.body = {
 		  success: result.rowCount > 0,
